@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+           elementFormDefault="qualified"
+           targetNamespace="http://spring.io/guides/gs-producing-web-service">
+    <xs:element name="trackingResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="trackingURL" type="xs:string" />
+                <xs:element name="trackingID" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="trackingRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="metadata" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="key" type="xs:string" />
+                            <xs:element name="value" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

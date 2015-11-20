@@ -1,6 +1,6 @@
 package au.com.suncorp.easyanalytics.api;
 
-import au.com.suncorp.easyanalytics.api.dto.TrackingURLDTO;
+import au.com.suncorp.easyanalytics.api.dto.TrackingResponse;
 import au.com.suncorp.easyanalytics.domain.TrackingMetadata;
 import au.com.suncorp.easyanalytics.domain.TrackingReference;
 import au.com.suncorp.easyanalytics.repository.TrackingMetadataRepository;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -32,22 +31,11 @@ public final class TrackingController {
     private TrackingService trackingService;
 
     @RequestMapping(method = POST)
-    public ResponseEntity<TrackingURLDTO> createTrackingReference(@RequestBody Set<TrackingMetadata> metadata,
-                                                                  HttpServletResponse response) {
-        TrackingReference trackingRef = new TrackingReference();
+    public ResponseEntity<TrackingResponse> createTrackingReference(@RequestBody Set<TrackingMetadata> metadata) {
+        TrackingReference trackingRef = trackingService.createTrackingReference(metadata);
 
-        trackingReferenceRepository.save(trackingRef);
+        String trackingURL = trackingService.generateTrackingURL(trackingRef.getTrackingID());
 
-        metadata.stream().forEach(meta -> {
-            meta.setTrackingReference(trackingRef);
-            // This is a database call for each piece of meta
-            trackingMetadataRepository.save(meta);
-        });
-
-        trackingRef.setTrackingMetadata(metadata);
-
-        String trackingUrl = trackingService.generateTrackingURL(trackingRef.getTrackingID());
-
-        return new ResponseEntity<>(new TrackingURLDTO(trackingUrl), HttpStatus.CREATED);
+        return new ResponseEntity<>(new TrackingResponse(trackingURL), HttpStatus.CREATED);
     }
 }
