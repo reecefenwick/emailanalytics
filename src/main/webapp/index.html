@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="emailanalytics">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <base href="/">
+    <meta charset="utf-8">
+    <title>Email Analytics</title>
+    <link href="favicon.png" rel="icon" type="image/png">
+    <link href='https://fonts.googleapis.com/css?family=Roboto|Montserrat:400,700|Open+Sans:400,300,700'
+          rel='stylesheet'
+          type='text/css'>
+
+
+
+    <!-- build:css assets/styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css assets/styles/main.css -->
+        <link href="assets/styles/dropzone.css" rel="stylesheet">
+        <link href="assets/styles/animate.css" rel="stylesheet">
+        <link href="assets/styles/bootstrap.css" rel="stylesheet">
+        <link href="assets/styles/custom.css" rel="stylesheet">
+    <!-- endbuild -->
+</head>
+<body>
+<div class="navbar navbar-default navbar-static-top" role="navigation" bs-navbar>
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+            <span>Email<strong>Analytics</strong></span>
+        </a>
+    </div>
+    <ul class="nav navbar-nav">
+        <li data-match-route="/demo"><a href="/">Demo</a></li>
+    </ul>
+    <ul class="nav navbar-nav">
+        <li data-match-route="/create"><a href="/create">Help</a></li>
+    </ul>
+</div>
+<div ng-view class="{{pageClass}}"></div>
+
+<!-- build:js src/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-cache-buster/angular-cache-buster.js"></script>
+<script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+<script src="bower_components/angular-messages/angular-messages.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+
+<!-- build:js({.tmp,src/main/webapp}) src/app.js -->
+<script src="src/app/app.js"></script>
+
+<script src="src/components/util/fromNow.filter.js"></script>
+<script src="src/components/util/toMB.filter.js"></script>
+
+<script src="src/components/emailTracking/emailTracking.service.js"></script>
+
+<script src="src/app/emailTracking/create/createTrackingRef.controller.js"></script>
+<script src="src/app/emailTracking/reporting/report.controller.js"></script>
+<script src="src/app/emailTracking/demo/trackingDemo.controller.js"></script>
+<!-- endbuild -->
+
+</body>
+</html>

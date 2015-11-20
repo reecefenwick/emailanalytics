@@ -1,0 +1,23 @@
+<div class="container">
+    <div id="alerts-container"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Your Uploads
+            <div class="pull-right">
+                <input class="search" type="text" ng-model="query.description" placeholder="Search...">
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="list-group">
+                <a ng-repeat="upload in uploads | filter:query | orderBy:'createdAt':true" href="/upload/{{upload.key}}"
+                   class="list-group-item">
+                    {{upload.description}}
+                    
+                    <span class="label label-info pull-right"
+                          style="margin-left: 20px;">{{upload.files.length}} Files</span>
+                </a>
+            </div>
+            <a class="btn btn-success" href="/upload/create" role="button">New Upload</a>
+        </div>
+    </div>
+</div>
