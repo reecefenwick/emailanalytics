@@ -1,18 +1,23 @@
 package au.com.suncorp.easyanalytics.service;
 
 
+import com.google.api.services.analytics.model.GaData;
 import org.junit.Before;
 import org.junit.Test;
 
 public class GoogleEventServiceTest {
 
-    private GoogleEventService googleEventService = new GoogleEventService();
+    private GoogleEventService googleEventService;
+
     @Before
-    public void setup() {
+    public void setup() throws Exception {
+        googleEventService = new GoogleEventService();
     }
 
     @Test
     public void getEventsTest() throws Exception {
-        googleEventService.getEvents();
+        GaData results = googleEventService.getEvents();
+
+        googleEventService.printGaData(results);
     }
 }

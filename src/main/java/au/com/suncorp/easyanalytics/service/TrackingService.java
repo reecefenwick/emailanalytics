@@ -4,14 +4,19 @@ import au.com.suncorp.easyanalytics.domain.TrackingMetadata;
 import au.com.suncorp.easyanalytics.domain.TrackingReference;
 import au.com.suncorp.easyanalytics.repository.TrackingMetadataRepository;
 import au.com.suncorp.easyanalytics.repository.TrackingReferenceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class TrackingService {
+
+    private static final Logger log = LoggerFactory.getLogger(TrackingService.class);
 
     @Autowired
     private TrackingMetadataRepository trackingMetadataRepository;
@@ -53,5 +58,29 @@ public class TrackingService {
         trackingRef.setTrackingMetadata(metadata);
 
         return trackingRef;
+    }
+
+    public void updateTrackingMetrics(@NotNull String trackingID, @NotNull Integer uniqueHits, @NotNull Integer totalHits) {
+
+        try {
+            UUID id = UUID.fromString(trackingID);
+
+            TrackingReference trackingRef = trackingReferenceRepository.findBytrackingID(id);
+
+            if (trackingRef != null) {
+                log.info("Unique Hits {} and Total Hits {}", uniqueHits, totalHits);
+
+                trackingRef.setTotalHits(totalHits);
+                trackingRef.setUniqueHits(uniqueHits);
+
+                trackingReferenceRepository.save(trackingRef);
+
+                log.info("Updated trackingRef {}", trackingID);
+            }
+
+        } catch (IllegalArgumentException e) {
+            log.error("Error converting trackingID {} with message {}", trackingID, e.getMessage());
+            log.error(e.getMessage());
+        }
     }
 }

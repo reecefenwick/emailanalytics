@@ -15,6 +15,12 @@ public class TrackingReference {
     @Column(name = "ID")
     private UUID trackingID;
 
+    @Column(name = "UNIQUE_HITS")
+    private Integer uniqueHits;
+
+    @Column(name = "TOTAL_HITS")
+    private Integer totalHits;
+
     @OneToMany(mappedBy = "trackingReference")
     private Set<TrackingMetadata> trackingMetadata = new HashSet<>();
 
@@ -32,5 +38,21 @@ public class TrackingReference {
 
     public void setTrackingMetadata(Set<TrackingMetadata> trackingMetadata) {
         this.trackingMetadata = trackingMetadata;
+    }
+
+    public Integer getTotalHits() {
+        return totalHits;
+    }
+
+    public void setTotalHits(Integer totalHits) {
+        this.totalHits = totalHits;
+    }
+
+    public Integer getUniqueHits() {
+        return uniqueHits;
+    }
+
+    public void setUniqueHits(Integer uniqueHits) {
+        this.uniqueHits = uniqueHits;
     }
 }

@@ -9,10 +9,10 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.GaData;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,11 +20,11 @@ import java.util.List;
 @Service
 public class GoogleEventService {
 
-    public GoogleEventService() {
+    private static final String GA_VIEW_ID = "110778647";
 
-    }
+    private Analytics analytics;
 
-    public Analytics initializeAnalytics() throws Exception {
+    public GoogleEventService() throws Exception {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
@@ -39,26 +39,16 @@ public class GoogleEventService {
                 .setServiceAccountScopes(collection)
                 .build();
 
-        return new Analytics.Builder(httpTransport, jsonFactory, credential)
-            .setApplicationName("Hello Analytics")
-            .build();
+        this.analytics = new Analytics.Builder(httpTransport, jsonFactory, credential)
+                .setApplicationName("Hello Analytics")
+                .build();
     }
 
-    public void getEvents() throws Exception {
-        Analytics analytics = initializeAnalytics();
-
-//        String profileId = "112072484";
-//        String profileId = "110778647";
-        String profileId = "110778647";
-
-        GaData gaData = executeDataQuery(analytics, profileId);
-
-        printGaData(gaData);
-
-//        analytics.data();
+    public GaData getEvents() throws Exception {
+        return executeDataQuery(analytics);
     }
 
-    private static void printGaData(GaData results) {
+    public void printGaData(GaData results) {
 
         System.out.println(
                 "printing results for profile: " + results.getProfileInfo().getProfileName());
@@ -85,12 +75,14 @@ public class GoogleEventService {
         }
     }
 
-    private static GaData executeDataQuery(Analytics analytics, String profileId) throws IOException {
-        return analytics.data().ga().get("ga:" + profileId, // Table Id. ga: + profile id.
-                "2015-11-10", // Start date.
-                "2015-11-20", // End date.
+    private static GaData executeDataQuery(Analytics analytics) throws Exception {
+        DateTime currentDate = new DateTime();
+
+        return analytics.data().ga().get("ga:" + GA_VIEW_ID, // Table Id. ga: + profile id.
+                currentDate.minusDays(3).toLocalDate().toString(), // Start date.
+                currentDate.toLocalDate().toString(), // End date.
                 "ga:totalEvents,ga:uniqueEvents") // Metrics.
-                .setDimensions("ga:eventAction,ga:eventLabel,ga:eventCategory")
+                .setDimensions("ga:eventLabel")
                 .setMaxResults(25)
                 .execute();
     }
