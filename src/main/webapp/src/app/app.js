@@ -8,11 +8,11 @@ angular.module('emailanalytics', ['ngCacheBuster', 'ngResource', 'ngMessages',
                 templateUrl: 'src/app/emailTracking/demo/trackingDemo.tpl.html',
                 controller: 'DemoCtrl'
             })
-            .when('/upload/create', {
+            .when('/tracking/create', {
                 templateUrl: 'src/app/emailTracking/create/createTrackingRef.tpl.html',
                 controller: 'CreateTrackingRefCtrl'
             })
-            .when('/upload/:key', {
+            .when('/tracking/:id', {
                 templateUrl: 'src/app/emailTracking/reporting/report.tpl.html',
                 controller: 'ReportCtrl'
             })

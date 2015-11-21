@@ -2,8 +2,8 @@ package au.com.suncorp.easyanalytics.api;
 
 import au.com.suncorp.easyanalytics.EasyAnalyticsApplication;
 import au.com.suncorp.easyanalytics.TestUtil;
+import au.com.suncorp.easyanalytics.api.dto.TrackingRequest;
 import au.com.suncorp.easyanalytics.domain.TrackingMetadata;
-import au.com.suncorp.easyanalytics.repository.TrackingMetadataRepository;
 import au.com.suncorp.easyanalytics.repository.TrackingReferenceRepository;
 import au.com.suncorp.easyanalytics.service.TrackingService;
 import org.junit.Before;
@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,9 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @IntegrationTest
 public class TrackingControllerTest {
-
-    @Autowired
-    private TrackingMetadataRepository trackingMetadataRepository;
 
     @Autowired
     private TrackingReferenceRepository trackingReferenceRepository;
@@ -46,8 +44,6 @@ public class TrackingControllerTest {
     @Before
     public void setup() {
         TrackingController trackingController = new TrackingController();
-        ReflectionTestUtils.setField(trackingController, "trackingReferenceRepository", trackingReferenceRepository);
-        ReflectionTestUtils.setField(trackingController, "trackingMetadataRepository", trackingMetadataRepository);
         ReflectionTestUtils.setField(trackingController, "trackingService", trackingService);
         this.restUploadMockMvc = MockMvcBuilders.standaloneSetup(trackingController).build();
     }
@@ -62,11 +58,25 @@ public class TrackingControllerTest {
 
         trackingMetadataList.add(trackingMetadata);
 
+        TrackingRequest trackingRequest = new TrackingRequest();
+        trackingRequest.setMetadata(trackingMetadataList);
+
         restUploadMockMvc.perform(
                 post("/api/tracking")
-                        .content(TestUtil.convertObjectToJsonBytes(trackingMetadataList))
+                        .content(TestUtil.convertObjectToJsonBytes(trackingRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.trackingUrl").exists());
+                .andExpect(jsonPath("$.trackingURL").exists())
+                .andExpect(jsonPath("$.trackingID").exists())
+                .andExpect(jsonPath("$.trackingMetadata").exists());
+
+        String TRACKING_ID = trackingReferenceRepository.findAll().get(0).getTrackingID().toString();
+
+        // TODO - This is bad
+        restUploadMockMvc.perform(
+                get("/api/tracking/" + TRACKING_ID))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.trackingURL").exists())
+                .andExpect(jsonPath("$.trackingID").exists());
     }
 }

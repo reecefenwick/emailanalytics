@@ -1,51 +1,29 @@
 <div class="container" xmlns="http://www.w3.org/1999/html">
     <div class="panel panel-default">
-        <div class="panel-heading">Create an Upload</div>
-        <div class="panel-body">
-            <form class="form" method="post" ng-submit="createUpload()" name="newUploadForm">
-                <h5>Description</h5>
-
-                <div class="form-group"
-                     ng-class="{ 'has-error' : newUploadForm.showName.$invalid && newUploadForm.showName.$dirty }">
-                    <input class="form-control" type="text" name="description" ng-model="description"
-                           placeholder="Enter a description for your upload, eg. Medical documents for John Doe"
-                           required
-                           autofocus>
-                </div>
-                <h5>Expiry Date <span class="ion-information-circled"
-                                      bs-popover="tooltips"
-                                      data-placement="bottom"
-                                      data-content="{{tooltips.expiryDate.content}}"
-                                      data-animation="am-flip-x"></span>
-                </h5>
-
-                <div class="form-group">
-                    <div class="form-group col-xs-3">
-                        <input type="text" size="10" class="form-control" ng-model="expiryDate"
-                               data-autoclose="1"
-                               data-date-format="dd/MM/yyyy"
-                               data-max-date="{{datepicker.maxDate}}"
-                               data-min-date="{{datepicker.minDate}}"
-                               data-icon-left="{{datepicker.iconLeft}}"
-                               data-icon-right="{{datepicker.iconRight}}"
-                               required
-                               placeholder="Date" bs-datepicker>
+        <div class="panel-heading">Create a tracking URL</div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <div class="form-group col-xs-3">
+                            <input type="text" size="10" placeholder="e.g. PolicyNumber" class="form-control" ng-model="key" required>
+                        </div>
+                        <div class="form-group col-xs-3">
+                            <input type="text" size="8" placeholder="e.g. 1230951" class="form-control" ng-model="value" required>
+                        </div>
                     </div>
-                    <div class="form-group col-xs-3">
-                        <input type="text" size="8" class="form-control" ng-model="expiryDate"
-                               data-time-format="h:mm:ss a"
-                               data-autoclose="1"
-                               data-icon-up="{{datepicker.iconUp}}"
-                               data-icon-down="{{datepicker.iconDown}}"
-                               required
-                               placeholder="Time" bs-timepicker>
-                    </div>
+                </form>
+                <a class="btn btn-success" ng-click="addMetadata()" role="button">Add Metadata</a>
+                <br>
+                <br>
+                <div class="list-group">
+                    <a ng-repeat="metadata in metadatas" class="list-group-item">
+                        {{metadata.key}} : {{metadata.value}}
+                    <span class="btn btn-danger btn-xs pull-right"
+                          style="margin-left: 20px;" ng-click="removeMetadata($index)">Remove</span>
+                    </a>
                 </div>
-                <br>
-                <br>
-                <br>
-                <button class="btn btn-primary" type="submit" ng-disabled="newUploadForm.$invalid">Create</button>
-            </form>
-        </div>
+
+                <a class="btn btn-success" ng-click="createTracker()" role="button">Create Tracker</a>
+            </div>
     </div>
 </div>

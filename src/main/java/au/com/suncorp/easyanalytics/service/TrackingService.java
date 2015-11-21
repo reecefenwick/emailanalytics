@@ -26,11 +26,17 @@ public class TrackingService {
 
     private static final String GA_ACCOUNT_ID = "UA-69408031-1";
 
+    public TrackingReference findTrackingRefByID(UUID trackingId){
+        TrackingReference trackingRef = trackingReferenceRepository.findBytrackingID(trackingId);
+        trackingRef.setTrackingMetadata(trackingMetadataRepository.findBytrackingReference(trackingRef));
+        return trackingRef;
+    }
+
     /**
      * Generate URL with embedded tracking ID
      * @return
      */
-    public String generateTrackingURL(UUID trackingId) {
+    private String generateTrackingURL(UUID trackingId) {
         return "http://www.google-analytics.com/collect" +
                 "?v=1" +
                 "&tid=" + GA_ACCOUNT_ID +
@@ -46,6 +52,8 @@ public class TrackingService {
 
     public TrackingReference createTrackingReference(Set<TrackingMetadata> metadata) {
         TrackingReference trackingRef = new TrackingReference();
+
+        trackingRef.setTrackingURL(generateTrackingURL(trackingRef.getTrackingID()));
 
         trackingReferenceRepository.save(trackingRef);
 

@@ -1,7 +1,6 @@
 package au.com.suncorp.easyanalytics.api;
 
 import au.com.suncorp.easyanalytics.api.dto.TrackingRequest;
-import au.com.suncorp.easyanalytics.api.dto.TrackingResponse;
 import au.com.suncorp.easyanalytics.domain.TrackingReference;
 import au.com.suncorp.easyanalytics.service.GoogleEventService;
 import au.com.suncorp.easyanalytics.service.TrackingService;
@@ -12,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -33,12 +34,15 @@ public final class TrackingController {
     private TrackingService trackingService;
 
     @RequestMapping(method = POST)
-    public ResponseEntity<TrackingResponse> createTrackingReference(@RequestBody TrackingRequest trackingRequst) {
+    public ResponseEntity<TrackingReference> createTrackingReference(@RequestBody TrackingRequest trackingRequst) {
         TrackingReference trackingRef = trackingService.createTrackingReference(trackingRequst.getMetadata());
 
-        String trackingURL = trackingService.generateTrackingURL(trackingRef.getTrackingID());
+        return new ResponseEntity<>(trackingRef, HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity<>(new TrackingResponse(trackingURL), HttpStatus.CREATED);
+    @RequestMapping(value = "/{ID}")
+    public ResponseEntity<?> getTrackingReference(@PathVariable String ID) {
+        return new ResponseEntity<>(trackingService.findTrackingRefByID(UUID.fromString(ID)), HttpStatus.OK);
     }
 
     /**

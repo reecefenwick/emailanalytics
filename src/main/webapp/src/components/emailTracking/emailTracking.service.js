@@ -1,4 +1,4 @@
 angular.module('emailanalytics')
     .factory('Tracking', function ($resource) {
-        return $resource('/api/tracking/:key');
+        return $resource('/api/tracking/:id');
     });

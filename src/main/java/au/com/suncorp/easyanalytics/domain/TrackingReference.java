@@ -21,6 +21,9 @@ public class TrackingReference {
     @Column(name = "TOTAL_HITS")
     private Integer totalHits;
 
+    @Column(name = "TRACKING_URL")
+    private String trackingURL;
+
     @OneToMany(mappedBy = "trackingReference")
     private Set<TrackingMetadata> trackingMetadata = new HashSet<>();
 
@@ -54,5 +57,13 @@ public class TrackingReference {
 
     public void setUniqueHits(Integer uniqueHits) {
         this.uniqueHits = uniqueHits;
+    }
+
+    public String getTrackingURL() {
+        return trackingURL;
+    }
+
+    public void setTrackingURL(String trackingURL) {
+        this.trackingURL = trackingURL;
     }
 }
