@@ -45,6 +45,11 @@ public final class TrackingController {
         return new ResponseEntity<>(trackingService.findTrackingRefByID(UUID.fromString(ID)), HttpStatus.OK);
     }
 
+    @RequestMapping
+    public ResponseEntity<List<TrackingReference>> findAllTrackingReferences() {
+        return new ResponseEntity<>(trackingService.findAllTrackingRefs(), HttpStatus.OK);
+    }
+
     /**
      * Scheduled task that pulls the latest info from google analytics.
      * Updates all tracking references pulled from GA

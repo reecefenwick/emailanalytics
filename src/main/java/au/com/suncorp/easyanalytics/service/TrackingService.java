@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -48,6 +50,19 @@ public class TrackingService {
                 "&cs=corro" +
                 "&cm=email" +
                 "&cn=marketingCampaign";
+    }
+
+    public List<TrackingReference> findAllTrackingRefs() {
+        List<TrackingReference> trackingReferences = trackingReferenceRepository.findAll();
+
+        List<TrackingReference> trackingRefWithMetadata = new ArrayList<>();
+
+        trackingReferences.stream().forEach(trackingRef -> {
+            trackingRef.setTrackingMetadata(trackingMetadataRepository.findBytrackingReference(trackingRef));
+            trackingRefWithMetadata.add(trackingRef);
+        });
+
+        return trackingRefWithMetadata;
     }
 
     public TrackingReference createTrackingReference(Set<TrackingMetadata> metadata) {

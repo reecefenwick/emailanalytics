@@ -12,12 +12,12 @@ angular.module('emailanalytics', ['ngCacheBuster', 'ngResource', 'ngMessages',
                 templateUrl: 'src/app/emailTracking/create/createTrackingRef.tpl.html',
                 controller: 'CreateTrackingRefCtrl'
             })
-            .when('/tracking/:id', {
+            .when('/', {
                 templateUrl: 'src/app/emailTracking/reporting/report.tpl.html',
                 controller: 'ReportCtrl'
             })
             .otherwise({
-                redirectTo: '/demo'
+                redirectTo: '/'
             });
     })
     .config(function ($httpProvider, httpRequestInterceptorCacheBusterProvider) {

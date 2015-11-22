@@ -25,7 +25,7 @@ angular.module('emailanalytics')
                         type: 'material',
                         duration: 3
                     });
-                    $location.path('/tracking/' + response.key);
+                    $location.path('/tracking');
                 }).catch(function (response) {
                     $alert({
                         title: 'Server error',

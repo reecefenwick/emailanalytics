@@ -1,69 +1,31 @@
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <span class="ion-edit"></span> Summary
+            <span class="ion-edit"></span> All Tracking References
         </div>
         <div class="panel-body">
-            <div class="media">
-                <div class="media-body">
-                    <button ng-show="ownsUpload()" type="button"
-                            class="btn btn-danger btn-sm pull-right" ng-click="deleteUpload()">Delete
-                    </button>
-                    <h5>
-                        <span class="ion-calendar"></span>
-                        Created {{upload.createdAt|fromNow}} by {{upload.createdBy}}
-                    </h5>
-                    <span class="ion-clock"></span>
-                    Expires {{upload.expiresAt|fromNow}}
-                    <br>
-                    <br>
-                    <p>{{upload.description}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="ion-upload"></span> Upload Files
-        </div>
-        <div class="panel-body">
-            <form class="dropzone" dropzone="dropzoneConfig">
-
-            </form>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tracking ID</th>
+                    <th>Total Hits</th>
+                    <th>Unique Hits</th>
+                    <th>Metadata Fields</th>
+                    <!-- Dynamic columns here -->
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="result in results">
+                    <th scope="row">{{$index}}</th>
+                    <td>{{result.trackingID}}</td>
+                    <td>{{result.totalHits}}</td>
+                    <td>{{result.uniqueHits}}</td>
+                    <td>{{result.trackingMetadata}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="ion-document-text"></span> File List
-        </div>
-        <div class="panel-body">
-            <div class="files">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Filename</th>
-                        <th>Upload Date</th>
-                        <th>Size</th>
-                        <th>Download</th>
-                        <th ng-show="ownsUpload()">Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="file in files">
-                        <td>{{file.filename}}</td>
-                        <td>{{file.uploadDate|fromNow}}</td>
-                        <td>{{file.contentLength|toMB}}</td>
-                        <td><a href="{{ '/api/upload/' + upload.key + '/file/' + file._id }}" target="_blank">
-                            <button type="button" class="btn btn-primary">Download</button>
-                        </a></td>
-                        <td ng-show="ownsUpload()">
-                            <button type="button" class="btn btn-danger" ng-click="deleteFile($index)">Delete</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
