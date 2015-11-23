@@ -78,5 +78,11 @@ public class TrackingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.trackingURL").exists())
                 .andExpect(jsonPath("$.trackingID").exists());
+
+        restUploadMockMvc.perform(
+                get("/api/tracking/?query=reecefenwick"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].trackingURL").exists())
+                .andExpect(jsonPath("$[0].trackingID").exists());
     }
 }

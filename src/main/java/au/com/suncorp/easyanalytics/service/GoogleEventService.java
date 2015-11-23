@@ -83,7 +83,6 @@ public class GoogleEventService {
                 currentDate.toLocalDate().toString(), // End date.
                 "ga:totalEvents,ga:uniqueEvents") // Metrics.
                 .setDimensions("ga:eventLabel")
-                .setMaxResults(25)
                 .execute();
     }
 

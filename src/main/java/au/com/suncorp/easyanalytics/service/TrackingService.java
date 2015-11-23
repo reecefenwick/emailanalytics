@@ -52,15 +52,23 @@ public class TrackingService {
                 "&cn=marketingCampaign";
     }
 
-    public List<TrackingReference> findAllTrackingRefs() {
+    public List<TrackingReference> findAllTrackingRefs(String metadataQuery) {
+
         List<TrackingReference> trackingReferences = trackingReferenceRepository.findAll();
 
         List<TrackingReference> trackingRefWithMetadata = new ArrayList<>();
 
-        trackingReferences.stream().forEach(trackingRef -> {
-            trackingRef.setTrackingMetadata(trackingMetadataRepository.findBytrackingReference(trackingRef));
-            trackingRefWithMetadata.add(trackingRef);
-        });
+        for (TrackingReference trackingReference : trackingReferences) {
+            Set<TrackingMetadata> trackingMetadatas = trackingMetadataRepository.findBytrackingReference(trackingReference);
+
+            for (TrackingMetadata trackingMetadata : trackingMetadatas) {
+                if (metadataQuery == null) {
+                    trackingRefWithMetadata.add(trackingReference);
+                } else if (trackingMetadata.getValue().toLowerCase().contains(metadataQuery.toLowerCase())) {
+                    trackingRefWithMetadata.add(trackingReference);
+                }
+            }
+        }
 
         return trackingRefWithMetadata;
     }

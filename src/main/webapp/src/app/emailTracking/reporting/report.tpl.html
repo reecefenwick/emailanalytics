@@ -1,8 +1,12 @@
 <div class="container">
+    <p class="bg-warning" style="padding: 10px">Please note, there can be delay of 10 minutes before the data is refreshed</p>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <span class="ion-edit"></span> All Tracking References
+        All Tracking References
+        <div class="pull-right">
+            <input class="search" type="text" ng-model="searchTerm" ng-change="query.description" placeholder="Search...">
         </div>
+    </div>
         <div class="panel-body">
             <table class="table table-bordered">
                 <thead>
@@ -11,17 +15,32 @@
                     <th>Tracking ID</th>
                     <th>Total Hits</th>
                     <th>Unique Hits</th>
-                    <th>Metadata Fields</th>
-                    <!-- Dynamic columns here -->
+                    <th>Metadata</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="result in results">
                     <th scope="row">{{$index}}</th>
                     <td>{{result.trackingID}}</td>
-                    <td>{{result.totalHits}}</td>
-                    <td>{{result.uniqueHits}}</td>
-                    <td>{{result.trackingMetadata}}</td>
+                    <td>
+                        <a style="color: #337ab7; text-decoration:underline" href="{{result.trackingURL}}"
+                           data-placement="bottom-left" data-type="info"
+                           data-animation="am-fade-and-scale" bs-tooltip="tooltip" target="_blank">
+                            {{result.totalHits || 0}}
+                        </a>
+                    </td>
+                    <td>
+                        <a style="color: #337ab7; text-decoration:underline" href="{{result.trackingURL}}"
+                           data-placement="bottom-left" data-type="info"
+                           data-animation="am-fade-and-scale" bs-tooltip="tooltip" target="_blank">
+                            {{result.uniqueHits || 0}}
+                        </a>
+                    </td>
+                    <td>
+                       <span ng-repeat="meta in result.trackingMetadata">
+                           | {{meta.key}} : {{meta.value}} |
+                       </span>
+                    </td>
                 </tr>
                 </tbody>
             </table>
